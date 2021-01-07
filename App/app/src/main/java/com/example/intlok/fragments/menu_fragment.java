@@ -23,6 +23,8 @@ import com.example.intlok.adapters.PostsAdapter;
 import com.example.intlok.api.ApiClient;
 import com.example.intlok.api.Constans;
 import com.example.intlok.api.InterfaceAPI;
+import com.example.intlok.models.ImagenPostResponse;
+import com.example.intlok.models.MultimediaResponse;
 import com.example.intlok.models.Post;
 import com.example.intlok.activity_main;
 import com.example.intlok.models.User;
@@ -62,7 +64,7 @@ public class menu_fragment extends Fragment {
     }
 
     private void init(){
-        sharedPreferences = getContext().getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        //sharedPreferences = getContext().getApplicationContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE);
         recyclerView = view.findViewById(R.id.recyclerHome);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -92,7 +94,7 @@ public class menu_fragment extends Fragment {
         StringRequest request= new StringRequest(Request.Method.GET, Constans.POSTS, response -> {
             try {
                 JSONObject object = new JSONObject(response);
-                if(object.getBoolean("success")){
+                if(object!=null){
                     JSONArray array = new JSONArray(object.getString("posts"));
                     for(int i=0; i<array.length();i++){
                         JSONObject postObject = array.getJSONObject(i);
@@ -104,6 +106,37 @@ public class menu_fragment extends Fragment {
                         post.setIdMultimedia(postObject.getInt("idMultimedia"));
                         post.setDescripcion(postObject.getString("descripcion"));
                         post.setCreated(postObject.getString("created_at"));
+
+                        Call<ImagenPostResponse> imagenPostResponseCall = ApiClient.getUserService().getImagenesPost(post.getIdMultimedia(),"Bearer "+Constans.AUTHTOKEN);
+                        imagenPostResponseCall.enqueue(new Callback<ImagenPostResponse>() {
+                            @Override
+                            public void onResponse(Call<ImagenPostResponse> call, Response<ImagenPostResponse> response) {
+                                if(response.isSuccessful()){
+                                    post.setRutaPost(response.body().getRuta());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ImagenPostResponse> call, Throwable t) {
+
+                            }
+                        });
+
+                        Call<MultimediaResponse> multimediaResponseCall = ApiClient.getUserService().getImagenPerfil("Bearer "+Constans.AUTHTOKEN);
+                        multimediaResponseCall.enqueue(new Callback<MultimediaResponse>() {
+                            @Override
+                            public void onResponse(Call<MultimediaResponse> call, Response<MultimediaResponse> response) {
+                                post.setRutaPerfil(response.body().getRuta());
+                            }
+
+                            @Override
+                            public void onFailure(Call<MultimediaResponse> call, Throwable t) {
+
+                            }
+                        });
+
+
+
                         postArrayList.add(post);
                     }
                     postsAdapter= new PostsAdapter(getContext(),postArrayList);

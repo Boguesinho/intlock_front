@@ -2,8 +2,10 @@ package com.example.intlok.api;
 
 import com.example.intlok.models.Follower;
 import com.example.intlok.models.FollowerResponse;
+import com.example.intlok.models.ImagenPostResponse;
 import com.example.intlok.models.LoginRequest;
 import com.example.intlok.models.LoginResponse;
+import com.example.intlok.models.MultimediaResponse;
 import com.example.intlok.models.Post;
 import com.example.intlok.models.RegisterAccountRequest;
 import com.example.intlok.models.RegisterAccountResponse;
@@ -44,6 +46,13 @@ public interface InterfaceAPI {
 
     @GET("getCuenta")
     Call<Cuenta> getCuenta(@Header("Authorization") String token);
+
+    @GET("getImagenesPosts")
+    Call<ImagenPostResponse> getImagenesPost(int idMultimedia,@Header("Authorization") String token);
+
+    @GET("getFotoPerfil")
+    Call<MultimediaResponse> getImagenPerfil(@Header("Authorization") String token);
+
 
     @GET("getImagenesPosts")
     Call<ImagenPostResponse> getImagenesPost(int idMultimedia,@Header("Authorization") String token);
