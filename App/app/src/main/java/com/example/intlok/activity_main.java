@@ -2,17 +2,12 @@ package com.example.intlok;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -41,13 +36,14 @@ public class activity_main extends AppCompatActivity {
 
         Intent i = getIntent();
         token = i.getStringExtra("token");
+        System.out.println("TOKEN RECIBIDO: " + Constans.AUTHTOKEN);
         setContentView(R.layout.activity_main);
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frameHomeContainer, new HomeFragment()).commit();
 
 
 
-        seguidores= (TextView) findViewById(R.id.textViewSeg);
+        seguidores= (TextView) findViewById(R.id.txtCantidadSeguidores);
         navegacion = (BottomNavigationView) findViewById(R.id.nav_view);
         navegacion.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -60,7 +56,7 @@ public class activity_main extends AppCompatActivity {
 
                 }
                 if(item.getItemId()==R.id.navigation_notifications){
-                    showSelectedFragment(new perfil_fragment(Constans.AUTHTOKEN));
+                    showSelectedFragment(new perfil_fragment(token));
                 }
 
                 return true;

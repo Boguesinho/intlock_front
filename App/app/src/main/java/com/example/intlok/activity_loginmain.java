@@ -96,7 +96,8 @@ public class activity_loginmain extends AppCompatActivity {
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if(response.isSuccessful()){
                     token=response.body().getToken();
-                    Constans.AUTHTOKEN=token;
+                    Constans.AUTHTOKEN= "Bearer " + token;
+                    System.out.println("TOKEN ENVIADO: " + Constans.AUTHTOKEN);
                     Toast.makeText(activity_loginmain.this, "Exito", Toast.LENGTH_LONG).show();
                     onFadeClicked(v,true);
                 }else{

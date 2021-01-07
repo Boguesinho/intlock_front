@@ -4,10 +4,11 @@ public class Cuenta {
     private int idCuenta;
     private int idUsuario;
     private String nombre;
-    private String apaellidos;
+    private String apellidos;
     private String email;
     private String telefono;
     private String genero;
+    private String info;
 
     public int getIdCuenta() {
         return idCuenta;
@@ -34,11 +35,11 @@ public class Cuenta {
     }
 
     public String getApaellidos() {
-        return apaellidos;
+        return apellidos;
     }
 
     public void setApaellidos(String apaellidos) {
-        this.apaellidos = apaellidos;
+        this.apellidos = apaellidos;
     }
 
     public String getEmail() {
@@ -64,4 +65,8 @@ public class Cuenta {
     public void setGenero(String genero) {
         this.genero = genero;
     }
+
+    public String getInfo() { return info; }
+
+    public void setInfo (String info){ this.info = info; }
 }

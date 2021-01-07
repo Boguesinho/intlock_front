@@ -9,6 +9,7 @@ import com.example.intlok.models.RegisterAccountRequest;
 import com.example.intlok.models.RegisterAccountResponse;
 import com.example.intlok.models.RegisterUserRequest;
 import com.example.intlok.models.RegisterUserResponse;
+import com.example.intlok.models.Cuenta;
 
 import java.util.List;
 
@@ -30,10 +31,25 @@ public interface InterfaceAPI {
     Call<RegisterAccountResponse> createAccount(@Body RegisterAccountRequest registerAccountRequest, @Header("Authorization") String token);
 
     @GET("getSeguidores")
-    Call<List<FollowerResponse>> getFollowers(@Header("Authorization") String token);
+    Call<Integer> getFollowers(@Header("Authorization") String token);
+
+    @GET("getSeguidos")
+    Call<Integer> getSeguidos(@Header("Authorization") String token);
+
+    @GET("getPostsCount")
+    Call<Integer> getPostsCount(@Header("Authorization") String token);
 
     @GET("posts")
     Call<List<Post>> getPosts(@Header("Authorization") String token);
+
+    @GET("getCuenta")
+    Call<Cuenta> getCuenta(@Header("Authorization") String token);
+
+    @GET("getImagenesPosts")
+    Call<ImagenPostResponse> getImagenesPost(int idMultimedia,@Header("Authorization") String token);
+
+    @GET("getFotoPerfil")
+    Call<MultimediaResponse> getImagenPerfil(@Header("Authorization") String token);
 
 
 }

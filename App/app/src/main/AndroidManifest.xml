@@ -3,6 +3,7 @@
     package="com.example.intlok">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -16,6 +17,7 @@
         <activity android:name=".activity_registromain"></activity>
         <activity android:name=".activity_registrocontinuacion"></activity>
         <activity android:name=".activity_main"></activity>
+        <activity android:name=".activity_perfil"></activity>
 
         <activity android:name=".activity_nuevo_post" />
         <activity
