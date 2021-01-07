@@ -65,5 +65,7 @@ public interface InterfaceAPI {
     @Multipart
     Call<ResponseBody> subirFotoPerfil(@Header("Authorization") String token, @Part MultipartBody.Part file);
 
+    @GET("getFotoPerfil")
+    Call<String> getFotoPerfil(@Header("Authorization") String token);
 
 }

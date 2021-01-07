@@ -38,6 +38,7 @@ import com.example.intlok.models.RegisterAccountRequest;
 import com.example.intlok.models.RegisterAccountResponse;
 import com.example.intlok.models.RegisterUserRequest;
 import com.example.intlok.models.RegisterUserResponse;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,6 +65,7 @@ public class perfil_fragment extends Fragment {
     private TextView textoEstado;
     private Button btnImagen;
     private View view;
+    private CircularImageView imagenPerfil;
 
     private int idUsuario;
 
@@ -83,6 +85,7 @@ public class perfil_fragment extends Fragment {
         textoPosts = (TextView) view.findViewById(R.id.txtCantidadPosts);
         textoNombre = (TextView) view.findViewById(R.id.txtNombrePerfil);
         textoEstado = (TextView) view.findViewById(R.id.txtEstado);
+        imagenPerfil = (CircularImageView) view.findViewById(R.id.circularImagePerfil);
 
         btnImagen = (Button)  view.findViewById(R.id.btnImagenPerfil);
         btnImagen.setOnClickListener( new View.OnClickListener() {
@@ -143,6 +146,8 @@ public class perfil_fragment extends Fragment {
                     if(response.isSuccessful()) {
                         System.out.println("Guardado correcto");
 
+                        colocarFoto();
+
                     } else {
                         System.out.println("Guardado incorrecto");
 
@@ -159,6 +164,28 @@ public class perfil_fragment extends Fragment {
             System.out.println("uri es null");
         }
     }
+
+    public void colocarFoto(){
+
+        Call<String> rutaImagen = ApiClient.getUserService().getFotoPerfil(Constans.AUTHTOKEN);
+        rutaImagen.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Bitmap bmImg = BitmapFactory.decodeFile(response.body());
+                imagenPerfil.setImageBitmap(bmImg);
+
+                view.invalidate();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                textoSeguidos.setText("-");
+                view.invalidate();
+            }
+        });
+    }
+
+
 
     public void requestStoragePermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
