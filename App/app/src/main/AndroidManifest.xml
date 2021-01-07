@@ -2,23 +2,39 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.intlok">
 
+<<<<<<< HEAD
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+=======
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+>>>>>>> pruebas
 
     <application
+        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:usesCleartextTraffic="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+<<<<<<< HEAD
         android:theme="@style/Theme.Intlok">
         <activity android:name=".activity_comentarios"></activity>
         <activity android:name=".activity_registromain"></activity>
         <activity android:name=".activity_registrocontinuacion"></activity>
         <activity android:name=".activity_main"></activity>
-        <activity android:name=".activity_perfil"></activity>
 
+=======
+        android:theme="@style/Theme.Intlok"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".addPostActivity"></activity>
+        <activity android:name=".activity_comentarios" />
+        <activity android:name=".activity_registromain" />
+        <activity android:name=".activity_registrocontinuacion" />
+        <activity android:name=".activity_main" />
+        <activity android:name=".activity_perfil" />
+>>>>>>> pruebas
         <activity android:name=".activity_nuevo_post" />
         <activity
             android:name=".activity_loginmain"
