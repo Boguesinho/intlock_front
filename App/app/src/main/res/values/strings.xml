@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Intlok</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Estados</string>
+    <string name="title_notifications">Perfil</string>
+</resources>
