@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.intlok.api.Constans;
 import com.example.intlok.fragments.menu_fragment;
 import com.example.intlok.fragments.perfil_fragment;
 import com.example.intlok.ui.home.HomeFragment;
@@ -53,13 +54,13 @@ public class activity_main extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 if(item.getItemId()==R.id.navigation_home){
-                    showSelectedFragment(new menu_fragment(token));
+                    showSelectedFragment(new menu_fragment());
                 }
                 if(item.getItemId()==R.id.navigation_dashboard){
 
                 }
                 if(item.getItemId()==R.id.navigation_notifications){
-                    showSelectedFragment(new perfil_fragment(token));
+                    showSelectedFragment(new perfil_fragment(Constans.AUTHTOKEN));
                 }
 
                 return true;

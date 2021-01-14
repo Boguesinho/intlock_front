@@ -14,6 +14,7 @@ import com.example.intlok.R;
 
 import com.example.intlok.models.Post;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -36,7 +37,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostsHolder>
 
     @Override
     public void onBindViewHolder(@NonNull PostsHolder holder, int position) {
-
+        Post post = postArrayList.get(position);
+        holder.txtDesc.setText(post.getDescripcion());
+        holder.txtDate.setText(post.getCreated());
     }
 
     @Override

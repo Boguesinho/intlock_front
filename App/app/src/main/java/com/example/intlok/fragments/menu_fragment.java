@@ -1,5 +1,7 @@
 package com.example.intlok.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +13,29 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.intlok.R;
 import com.example.intlok.adapters.PostsAdapter;
 import com.example.intlok.api.ApiClient;
+import com.example.intlok.api.Constans;
+import com.example.intlok.api.InterfaceAPI;
 import com.example.intlok.models.Post;
 import com.example.intlok.activity_main;
+import com.example.intlok.models.User;
 import com.google.android.material.appbar.MaterialToolbar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,12 +48,11 @@ public class menu_fragment extends Fragment {
     private SwipeRefreshLayout refreshLayout;
     private PostsAdapter postsAdapter;
     private MaterialToolbar toolbar;
-    private String token;
+    private SharedPreferences sharedPreferences;
 
 
 
-    public menu_fragment(String token){
-        this.token=token;
+    public menu_fragment(){
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -47,6 +62,7 @@ public class menu_fragment extends Fragment {
     }
 
     private void init(){
+        sharedPreferences = getContext().getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         recyclerView = view.findViewById(R.id.recyclerHome);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -64,7 +80,59 @@ public class menu_fragment extends Fragment {
         });
     }
 
+    private void getImages(){
+
+    }
+
     private void getPosts(){
+
+        postArrayList = new ArrayList<>();
+        refreshLayout.setRefreshing(true);
+
+        StringRequest request= new StringRequest(Request.Method.GET, Constans.POSTS, response -> {
+            try {
+                JSONObject object = new JSONObject(response);
+                if(object.getBoolean("success")){
+                    JSONArray array = new JSONArray(object.getString("posts"));
+                    for(int i=0; i<array.length();i++){
+                        JSONObject postObject = array.getJSONObject(i);
+                        //JSONObject userObject = postObject.getJSONObject("user");
+
+                        Post post = new Post();
+                        post.setId(postObject.getInt("id"));
+                        post.setIdUsuario(postObject.getInt("idUsuario"));
+                        post.setIdMultimedia(postObject.getInt("idMultimedia"));
+                        post.setDescripcion(postObject.getString("descripcion"));
+                        post.setCreated(postObject.getString("created_at"));
+                        postArrayList.add(post);
+                    }
+                    postsAdapter= new PostsAdapter(getContext(),postArrayList);
+                    recyclerView.setAdapter(postsAdapter);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            refreshLayout.setRefreshing(false);
+
+        },error -> {
+            error.printStackTrace();;
+            refreshLayout.setRefreshing(false);
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                String token = sharedPreferences.getString("token","");
+                HashMap<String, String> map = new HashMap<>();
+                map.put("Authorization", "Bearer "+Constans.AUTHTOKEN);
+                return super.getHeaders();
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(request);
+
+
+
+        /*
         postArrayList = new ArrayList<>();
         refreshLayout.setRefreshing(true);
 
@@ -93,7 +161,7 @@ public class menu_fragment extends Fragment {
             public void onFailure(Call<List<Post>> call, Throwable t) {
                 refreshLayout.setRefreshing(false);
             }
-        });
+        });*/
 
     }
 }

@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
 
 import com.example.intlok.api.ApiClient;
+import com.example.intlok.api.Constans;
 import com.example.intlok.models.LoginRequest;
 import com.example.intlok.models.LoginResponse;
 import com.google.android.material.snackbar.Snackbar;
@@ -95,6 +96,7 @@ public class activity_loginmain extends AppCompatActivity {
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if(response.isSuccessful()){
                     token=response.body().getToken();
+                    Constans.AUTHTOKEN=token;
                     Toast.makeText(activity_loginmain.this, "Exito", Toast.LENGTH_LONG).show();
                     onFadeClicked(v,true);
                 }else{

@@ -7,7 +7,7 @@ public class Post {
     private int idUsuario;
     private String descripcion;
     private int idMultimedia;
-    private Date created;
+    private String created;
     private Date updated;
 
     public int getId() {
@@ -42,11 +42,11 @@ public class Post {
         this.idMultimedia = idMultimedia;
     }
 
-    public Date getCreated() {
+    public String getCreated() {
         return created;
     }
 
-    public void setCreated(Date created) {
+    public void setCreated(String created) {
         this.created = created;
     }
 
