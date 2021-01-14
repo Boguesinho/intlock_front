@@ -4,6 +4,7 @@ import com.example.intlok.models.Follower;
 import com.example.intlok.models.FollowerResponse;
 import com.example.intlok.models.LoginRequest;
 import com.example.intlok.models.LoginResponse;
+import com.example.intlok.models.Post;
 import com.example.intlok.models.RegisterAccountRequest;
 import com.example.intlok.models.RegisterAccountResponse;
 import com.example.intlok.models.RegisterUserRequest;
@@ -29,5 +30,10 @@ public interface InterfaceAPI {
     Call<RegisterAccountResponse> createAccount(@Body RegisterAccountRequest registerAccountRequest, @Header("Authorization") String token);
 
     @GET("getSeguidores")
-    Call<List<FollowerResponse>> getFollowers();
+    Call<List<FollowerResponse>> getFollowers(@Header("Authorization") String token);
+
+    @GET("posts")
+    Call<List<Post>> getPosts(@Header("Authorization") String token);
+
+
 }

@@ -95,7 +95,6 @@ public class activity_loginmain extends AppCompatActivity {
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if(response.isSuccessful()){
                     token=response.body().getToken();
-                    Log.d("STATE", token);
                     Toast.makeText(activity_loginmain.this, "Exito", Toast.LENGTH_LONG).show();
                     onFadeClicked(v,true);
                 }else{
@@ -139,6 +138,7 @@ public class activity_loginmain extends AppCompatActivity {
         if(band){
 
             Intent siguiente = new Intent(this, activity_main.class);
+            siguiente.putExtra("token",token);
             startActivity(siguiente, ActivityOptionsCompat
                     .makeSceneTransitionAnimation(this).toBundle());
         }else{

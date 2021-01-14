@@ -1,9 +1,12 @@
 package com.example.intlok.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -19,19 +22,22 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class perfil_fragment extends Fragment {
-
+    private String token;
     public static int auxcount;
-    public perfil_fragment(){
+    public perfil_fragment(String token){
+        this.token=token;
         countFollowers();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         return inflater.inflate(R.layout.fragment_notifications, container,false);
 
+
+
     }
 
     public void countFollowers(){
-        Call<List<FollowerResponse>> listCall = ApiClient.getUserService().getFollowers();
+        Call<List<FollowerResponse>> listCall = ApiClient.getUserService().getFollowers(token);
         listCall.enqueue(new Callback<List<FollowerResponse>>() {
             @Override
             public void onResponse(Call<List<FollowerResponse>> call, Response<List<FollowerResponse>> response) {
@@ -40,7 +46,6 @@ public class perfil_fragment extends Fragment {
 
                 }
                 List<FollowerResponse> list = response.body();
-
 
                 for (FollowerResponse i : list
                      ) {
