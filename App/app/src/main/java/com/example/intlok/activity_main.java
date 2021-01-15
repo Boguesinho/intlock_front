@@ -23,8 +23,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class activity_main extends AppCompatActivity {
-
-    private static final int GALLERY_ADD_PROFILE = 1;
     private static final int GALLERY_ADD_POST = 2;
     private Bitmap bitmap = null;
 
@@ -39,9 +37,6 @@ public class activity_main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent i = getIntent();
-        token = i.getStringExtra("token");
-        System.out.println("TOKEN RECIBIDO: " + Constans.AUTHTOKEN);
         setContentView(R.layout.activity_main);
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frameHomeContainer, new HomeFragment()).commit();
@@ -61,7 +56,7 @@ public class activity_main extends AppCompatActivity {
 
                 }
                 if(item.getItemId()==R.id.navigation_notifications){
-                    showSelectedFragment(new perfil_fragment(token));
+                    showSelectedFragment(new perfil_fragment());
                 }
 
                 return true;
@@ -88,15 +83,6 @@ public class activity_main extends AppCompatActivity {
             startActivity(i);
         }
     }
-    /*
-    @Override
-    public void onActivityResult(int requestCode, int resultCode,@Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode,data);
-        if(requestCode==GALLERY_ADD_PROFILE && resultCode==RESULT_OK){
-            Uri imguro= data.getData();
-
-        }
-    }*/
 
     public void showSelectedFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment)

@@ -50,7 +50,6 @@ public class menu_fragment extends Fragment {
     private SwipeRefreshLayout refreshLayout;
     private PostsAdapter postsAdapter;
     private MaterialToolbar toolbar;
-    private SharedPreferences sharedPreferences;
 
 
 
@@ -64,7 +63,6 @@ public class menu_fragment extends Fragment {
     }
 
     private void init(){
-        //sharedPreferences = getContext().getApplicationContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE);
         recyclerView = view.findViewById(R.id.recyclerHome);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -153,7 +151,6 @@ public class menu_fragment extends Fragment {
         }){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                String token = sharedPreferences.getString("token","");
                 HashMap<String, String> map = new HashMap<>();
                 map.put("Authorization", "Bearer "+Constans.AUTHTOKEN);
                 return super.getHeaders();
@@ -162,39 +159,6 @@ public class menu_fragment extends Fragment {
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
         queue.add(request);
-
-
-
-        /*
-        postArrayList = new ArrayList<>();
-        refreshLayout.setRefreshing(true);
-
-
-        Call<List<Post>> postCall= ApiClient.getUserService().getPosts(token);
-        postCall.enqueue(new Callback<List<Post>>() {
-            @Override
-            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-                if(response.isSuccessful()){
-                    List<Post> list= response.body();
-
-                    for (Post i : list
-                         ) {
-                        postArrayList.add(i);
-                    }
-                    postsAdapter = new PostsAdapter(getContext(),postArrayList);
-                    recyclerView.setAdapter(postsAdapter);
-                }
-
-
-                refreshLayout.setRefreshing(false);
-            }
-
-
-            @Override
-            public void onFailure(Call<List<Post>> call, Throwable t) {
-                refreshLayout.setRefreshing(false);
-            }
-        });*/
 
     }
 }

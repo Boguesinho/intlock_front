@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
 
 import com.example.intlok.api.ApiClient;
+import com.example.intlok.api.Constans;
 import com.example.intlok.models.LoginRequest;
 import com.example.intlok.models.LoginResponse;
 import com.example.intlok.models.RegisterUserRequest;
@@ -89,6 +90,7 @@ public class activity_registromain extends AppCompatActivity {
                 int idUsuario=response.body().getUser().getId();
                 Log.println(idUsuario,"STATE","registro");
                 String token= response.body().getToken();
+                Constans.AUTHTOKEN=token;
                 onFadeClicked(v,idUsuario,token);
                 //checkLogin(v,idUsuario);
             }

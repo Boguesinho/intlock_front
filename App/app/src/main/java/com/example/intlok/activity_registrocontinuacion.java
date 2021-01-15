@@ -38,9 +38,7 @@ public class activity_registrocontinuacion extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Intent i = getIntent();
-        int idUsuario = i.getIntExtra("idUsuario", 0);
         token = i.getStringExtra("token");
-        id=idUsuario;
 
         Fade fadein= new Fade(Fade.IN);
         fadein.setDuration(activity_loginmain.DURATION_TRANSITION);
@@ -133,8 +131,7 @@ public class activity_registrocontinuacion extends AppCompatActivity {
         getWindow().setExitTransition(transition);
 
 
-        Intent siguiente = new Intent(this, activity_main.class);
-        siguiente.putExtra("idUsuario", id);
+        Intent siguiente = new Intent(this, activity_loginmain.class);
         startActivity(siguiente, ActivityOptionsCompat
                 .makeSceneTransitionAnimation(this).toBundle());
     }
