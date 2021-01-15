@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.intlok.R;
 
+import com.example.intlok.api.Constans;
 import com.example.intlok.models.Post;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
@@ -38,6 +39,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostsHolder>
     @Override
     public void onBindViewHolder(@NonNull PostsHolder holder, int position) {
         Post post = postArrayList.get(position);
+        Picasso.get().load(Constans.URL+"public/imagen"+post.getRutaPerfil()).into(holder.imgProfile);
+        Picasso.get().load(Constans.URL+"public/imagen"+post.getRutaPost()).into(holder.imgPost);
+        holder.txtLikes.setText("20");
+        holder.txtComments.setText("20");
         holder.txtDesc.setText(post.getDescripcion());
         holder.txtDate.setText(post.getCreated());
     }

@@ -12,7 +12,7 @@
         android:id="@+id/toolbarHome"
         android:elevation="1dp"
         android:theme="@style/Widget.MaterialComponents.BottomAppBar"
-        app:title="">
+        app:title=" ">
 
         <TextView
             android:layout_width="wrap_content"

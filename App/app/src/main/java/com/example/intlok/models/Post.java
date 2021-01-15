@@ -9,6 +9,24 @@ public class Post {
     private int idMultimedia;
     private String created;
     private Date updated;
+    private String rutaPost;
+    private String rutaPerfil;
+
+    public String getRutaPost() {
+        return rutaPost;
+    }
+
+    public String getRutaPerfil() {
+        return rutaPerfil;
+    }
+
+    public void setRutaPost(String rutaPost) {
+        this.rutaPost = rutaPost;
+    }
+
+    public void setRutaPerfil(String rutaPerfil) {
+        this.rutaPerfil = rutaPerfil;
+    }
 
     public int getId() {
         return id;
