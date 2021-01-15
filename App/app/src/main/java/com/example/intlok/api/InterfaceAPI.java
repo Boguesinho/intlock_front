@@ -47,12 +47,18 @@ public interface InterfaceAPI {
     @GET("getCuenta")
     Call<Cuenta> getCuenta(@Header("Authorization") String token);
 
-    @GET("getImagenPost")
+    @GET("getImagenesPosts")
     Call<ImagenPostResponse> getImagenesPost(int idMultimedia,@Header("Authorization") String token);
 
     @GET("getFotoPerfil")
     Call<MultimediaResponse> getImagenPerfil(@Header("Authorization") String token);
 
+
+    @GET("getImagenesPosts")
+    Call<ImagenPostResponse> getImagenesPost(int idMultimedia,@Header("Authorization") String token);
+
+    @GET("getFotoPerfil")
+    Call<MultimediaResponse> getImagenPerfil(@Header("Authorization") String token);
 
 
 }

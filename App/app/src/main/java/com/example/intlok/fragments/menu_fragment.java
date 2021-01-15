@@ -45,8 +45,8 @@ import retrofit2.Response;
 
 public class menu_fragment extends Fragment {
     private View view;
-    public static RecyclerView recyclerView;
-    public static ArrayList<Post> postArrayList;
+    private RecyclerView recyclerView;
+    private ArrayList<Post> postArrayList;
     private SwipeRefreshLayout refreshLayout;
     private PostsAdapter postsAdapter;
     private MaterialToolbar toolbar;
@@ -56,7 +56,7 @@ public class menu_fragment extends Fragment {
 
     public menu_fragment(){
     }
-    @Override
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         view = inflater.inflate(R.layout.fragment_home,container,false);
         init();
