@@ -56,7 +56,7 @@ public class activity_main extends AppCompatActivity {
 
                 }
                 if(item.getItemId()==R.id.navigation_notifications){
-                    showSelectedFragment(new perfil_fragment());
+                    showSelectedFragment(new perfil_fragment(token));
                 }
 
                 return true;
