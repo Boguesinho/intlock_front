@@ -2,12 +2,14 @@ package com.example.intlok;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -18,16 +20,19 @@ import com.example.intlok.fragments.menu_fragment;
 import com.example.intlok.fragments.perfil_fragment;
 import com.example.intlok.ui.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class activity_main extends AppCompatActivity {
 
     private static final int GALLERY_ADD_PROFILE = 1;
+    private static final int GALLERY_ADD_POST = 2;
     private Bitmap bitmap = null;
 
     TextView seguidores;
     View vista;
     String token;
     BottomNavigationView navegacion;
+    FloatingActionButton fab;
 
     private FragmentManager fragmentManager;
 
@@ -63,7 +68,27 @@ public class activity_main extends AppCompatActivity {
             }
         });
     }
-/*
+
+    private void init (){
+            fab= findViewById(R.id.fab);
+            fab.setOnClickListener(v -> {
+                Intent i = new Intent(Intent.ACTION_PICK);
+                i.setType("image/*");
+                startActivityForResult(i,GALLERY_ADD_POST);
+            });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==GALLERY_ADD_POST && requestCode == RESULT_OK){
+            Uri imgUri = data.getData();
+            Intent i = new Intent(activity_main.this,addPostActivity.class);
+            i.setData(imgUri);
+            startActivity(i);
+        }
+    }
+    /*
     @Override
     public void onActivityResult(int requestCode, int resultCode,@Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode,data);
