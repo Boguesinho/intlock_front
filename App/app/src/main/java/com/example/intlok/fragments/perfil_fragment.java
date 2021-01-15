@@ -1,7 +1,13 @@
 package com.example.intlok.fragments;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -10,19 +16,39 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.intlok.MainActivity;
+import com.example.intlok.activity_registrocontinuacion;
+import com.example.intlok.activity_registromain;
 import com.example.intlok.api.Constans;
 import com.example.intlok.R;
 import com.example.intlok.api.ApiClient;
 import com.example.intlok.models.Cuenta;
+import com.example.intlok.models.ImagenPerfilRequest;
+import com.example.intlok.models.RegisterAccountRequest;
+import com.example.intlok.models.RegisterAccountResponse;
+import com.example.intlok.models.RegisterUserRequest;
+import com.example.intlok.models.RegisterUserResponse;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,10 +65,15 @@ public class perfil_fragment extends Fragment {
     private TextView textoEstado;
     private Button btnImagen;
     private View view;
+    private CircularImageView imagenPerfil;
+
+    private int idUsuario;
 
     public perfil_fragment(String _token){
         token = _token;
     }
+    int STORAGE_PERMISSION_CODE = 1;
+
 
 
 
@@ -54,6 +85,7 @@ public class perfil_fragment extends Fragment {
         textoPosts = (TextView) view.findViewById(R.id.txtCantidadPosts);
         textoNombre = (TextView) view.findViewById(R.id.txtNombrePerfil);
         textoEstado = (TextView) view.findViewById(R.id.txtEstado);
+        imagenPerfil = (CircularImageView) view.findViewById(R.id.circularImagePerfil);
 
         btnImagen = (Button)  view.findViewById(R.id.btnImagenPerfil);
         btnImagen.setOnClickListener( new View.OnClickListener() {
@@ -74,17 +106,123 @@ public class perfil_fragment extends Fragment {
     //PROCESO DE CAMBIO DE LA IMAGEN DEL USUARIO
 
     public void abrirGaleria() {
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, 1);
+        if(ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            photoPickerIntent.setType("image/*");
+            startActivityForResult(photoPickerIntent, 1);
+        } else {
+            requestStoragePermission();
+        }
+
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK){
-            System.out.println("IMAGEN SELECCIONADA");
+        if (resultCode == RESULT_OK) {
+            Uri uriImagen = data.getData();
+            System.out.println("ENVIANDO: " + getRealPathFromURI(uriImagen));
+
+            actualizarFoto(uriImagen);
         }
     }
+
+    private void actualizarFoto (Uri uriImagen) {
+        if (uriImagen != null){
+            System.out.println("URI NO ES NULL");
+            File imageFile = new File(getRealPathFromURI(uriImagen));
+            RequestBody requestBody = RequestBody.create(imageFile, MediaType.parse("images/jpeg"));
+            MultipartBody.Part filePart = MultipartBody.Part.createFormData("ruta", imageFile.getName(), requestBody);
+
+            Call<ResponseBody> subirFotoCall = ApiClient.getUserService().subirFotoPerfil(Constans.AUTHTOKEN, filePart);
+            System.out.println("Entrando a callback");
+            subirFotoCall.enqueue(new Callback<ResponseBody>() {
+
+
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    System.out.println("DENTRO DE CALLBACK");
+                    if(response.isSuccessful()) {
+                        System.out.println("Guardado correcto");
+
+                        colocarFoto();
+
+                    } else {
+                        System.out.println("Guardado incorrecto");
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    System.out.println(t.getMessage());
+                }
+
+            });
+        } else {
+            System.out.println("uri es null");
+        }
+    }
+
+    public void colocarFoto(){
+
+        Call<String> rutaImagen = ApiClient.getUserService().getFotoPerfil(Constans.AUTHTOKEN);
+        rutaImagen.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Bitmap bmImg = BitmapFactory.decodeFile(response.body());
+                imagenPerfil.setImageBitmap(bmImg);
+
+                view.invalidate();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                textoSeguidos.setText("-");
+                view.invalidate();
+            }
+        });
+    }
+
+
+
+    public void requestStoragePermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Permission needed")
+                    .setMessage("This permission is needed because of")
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(getActivity(),
+                                    new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == STORAGE_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getContext(),"PERMISSION GRANTED",Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getContext(),"PERMISSION DENIED",Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
+
 
     //OBTENER Y COLOCAR CANTIDAD DE SEGUIDORES
 
@@ -168,4 +306,19 @@ public class perfil_fragment extends Fragment {
             }
         });
     }
+
+    public String getRealPathFromURI(Uri uri) {
+        String result;
+        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+        if (cursor == null) {
+            result = uri.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
+    }
+
 }

@@ -1,7 +1,11 @@
 package com.example.intlok.api;
 
+import android.graphics.Bitmap;
+import android.media.Image;
+
 import com.example.intlok.models.Follower;
 import com.example.intlok.models.FollowerResponse;
+import com.example.intlok.models.ImagenPerfilRequest;
 import com.example.intlok.models.ImagenPostResponse;
 import com.example.intlok.models.LoginRequest;
 import com.example.intlok.models.LoginResponse;
@@ -15,11 +19,15 @@ import com.example.intlok.models.Cuenta;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 public interface InterfaceAPI {
 
@@ -53,6 +61,11 @@ public interface InterfaceAPI {
     @GET("getFotoPerfil")
     Call<MultimediaResponse> getImagenPerfil(@Header("Authorization") String token);
 
+    @POST("subirFotoPerfil")
+    @Multipart
+    Call<ResponseBody> subirFotoPerfil(@Header("Authorization") String token, @Part MultipartBody.Part file);
 
+    @GET("getFotoPerfil")
+    Call<String> getFotoPerfil(@Header("Authorization") String token);
 
 }
